@@ -1,4 +1,6 @@
 import time
+import ipdb
+
 
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QTextBrowser
@@ -7,6 +9,7 @@ from scapy.layers.inet import IP, ICMP
 
 from scapy_icmp_trace import get_network_ip, legit_ip, dns_resolve, pac_send
 
+db = ipdb.District("ipipfree.ipdb")
 
 class Example(QWidget):
 
@@ -27,9 +30,9 @@ class Example(QWidget):
         self.btn.clicked.connect(self.show_trace)
         self.btn.setGeometry(440, 20, 80, 30)
 
-        self.tb.setGeometry(20, 60, 500, 520)
+        self.tb.setGeometry(20, 60, 610, 520)
 
-        self.setGeometry(300, 300, 540, 600)
+        self.setGeometry(300, 300, 650, 600)
         self.setWindowTitle('Trace Route')
         self.show()
 
@@ -83,7 +86,7 @@ class Example(QWidget):
                 return -1
 
         self.tb_print("Trace to IP {} up to {} hops.".format(dst, max_ttl))
-        ip = "0.0.0.0"
+        ip = "Time out"
         ttl = 1
         while ttl <= max_ttl and ip != dst:
             j = 0
@@ -94,13 +97,20 @@ class Example(QWidget):
                     ip = p[1]
                     delay_time.append(str(p[0]) + "ms")
                 else:
-                    ip = "Time out"
                     delay_time.append("*")
-
                 j += 1
+            if(ip != "Time out"):
+                if(db.find(ip, "CN")[0] != db.find(ip, "CN")[1]):
+                    ip_pos = db.find(ip, "CN")[0] + "," + db.find(ip, "CN")[1]
+                else:
+                    ip_pos = db.find(ip, "CN")[1]
+            else:
+                ip_pos = ""
             self.tb_print(
-                '{}\t {:11}\t {:11}\t{:11}\t {:11} '.format(ttl, delay_time[0], delay_time[1], delay_time[2], ip))
+                '{}\t{:6}\t{:6}\t{:6}\t{:24}\t{}'.format(
+                    ttl, delay_time[0], delay_time[1], delay_time[2], ip, ip_pos))
             ttl += 1
+        self.tb_print("Trace finished\n")
         return 1
 
     def dns_resolve(self, domain):
