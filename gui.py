@@ -1,3 +1,5 @@
+import time
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QTextBrowser
 from scapy.all import *
@@ -14,23 +16,32 @@ class Example(QWidget):
         self.cursor = self.tb.textCursor()
         self.btn = QPushButton('trace', self)
         self.le = QLineEdit(self)
+
         self.init_ui()  # 界面绘制交给InitUi方法
 
     def init_ui(self):
         self.le.move(20, 20)
-        self.le.setGeometry(20,20,400,30)
+        self.le.setGeometry(20, 20, 400, 30)
+        self.le.setPlaceholderText('The IP address or Domain you want to trace')
 
-        self.btn.move(500, 20)
-        self.btn.clicked.connect(self.showTrace)
+        self.btn.clicked.connect(self.show_trace)
+        self.btn.setGeometry(440, 20, 80, 30)
 
-        self.tb.setGeometry(20, 60, 500, 500)
+        self.tb.setGeometry(20, 60, 500, 520)
 
-        self.setGeometry(300, 300, 600, 600)
+        self.setGeometry(300, 300, 540, 600)
         self.setWindowTitle('Trace Route')
         self.show()
 
-    def showTrace(self):
+    def show_trace(self):
+        self.le.setEnabled(False)
+        self.btn.setEnabled(False)
         self.trace_route(self.le.text())
+        self.le.setEnabled(True)
+        self.btn.setEnabled(True)
+
+    def closeEvent(self, event):
+        sys.exit(app.exec_())
 
     def get_network_ip(self):
         """get the local network ip, not loopback 127.*"""
@@ -40,7 +51,7 @@ class Example(QWidget):
         s.close()
         return ip
 
-    def pac_send(self,dst, ttl):
+    def pac_send(self, dst, ttl):
         ip = IP()
         icmp = ICMP()
         my_packet = ip / icmp
@@ -52,7 +63,9 @@ class Example(QWidget):
         my_packet[ICMP].seq = 0x02
         send_time = time.time()
         p = sr1(my_packet, timeout=2, verbose=False)
-        ping_time = int((time.time() - send_time) * 1000)
+        received_time = time.time()
+        ping_time = int(round((received_time - send_time) * 1000))
+
         # p.show()
         if p:
             src_ip = p[IP].src
@@ -60,7 +73,7 @@ class Example(QWidget):
         else:
             return -1, -1
 
-    def trace_route(self,dst):
+    def trace_route(self, dst):
         max_ttl = 64
         if not legit_ip(dst):
             try:
@@ -85,17 +98,18 @@ class Example(QWidget):
                     delay_time.append("*")
 
                 j += 1
-            self.tb_print('{}\t {:11}\t {:11}\t{:11}\t {:11} '.format(ttl,delay_time[0],delay_time[1],delay_time[2],ip))
+            self.tb_print(
+                '{}\t {:11}\t {:11}\t{:11}\t {:11} '.format(ttl, delay_time[0], delay_time[1], delay_time[2], ip))
             ttl += 1
         return 1
 
-    def dns_resolve(self,domain):
+    def dns_resolve(self, domain):
         res = socket.getaddrinfo(domain, None)
         ip = res[0][4][0]
         # tb_print(res)
         return ip
 
-    def legit_ip(self,ip):
+    def legit_ip(self, ip):
         compile_ip = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
         if compile_ip.match(ip):
             return True
