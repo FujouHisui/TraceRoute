@@ -1,6 +1,7 @@
 import ipdb
 import IP2Location
 import ipdb
+from PyQt5 import QtWidgets
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QLineEdit, QPushButton, QTextBrowser, QMainWindow
 from scapy.all import *
@@ -149,6 +150,7 @@ class Example(QMainWindow):
     def tb_print(self, mypstr):
         self.tb.append(mypstr)  # 在指定的区域显示提示信息
         self.tb.moveCursor(self.cursor.End)  # 光标移到最后
+        QtWidgets.QApplication.processEvents()
 
     def map_show(self, data):
         map_html = ('''
