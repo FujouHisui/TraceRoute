@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QLineEdit, QPushButton, QTextBrowser, 
 from scapy.all import *
 from scapy.layers.inet import IP, ICMP
 
-from scapy_icmp_trace import get_network_ip, legit_ip, dns_resolve, pac_send
+from udp_trace import udp_trace_route
 
 # Must run in root user!!!
 
@@ -28,7 +28,6 @@ class icmp_trace_route(QMainWindow):
 
 
     def init_ui(self):
-        self.le.move(20, 20)
         self.le.setGeometry(20, 20, 560, 30)
         self.le.setPlaceholderText('The IP address or Domain you want to trace')
 
@@ -68,7 +67,7 @@ class icmp_trace_route(QMainWindow):
         icmp = ICMP()
         my_packet = ip / icmp
         # packet[IP].src = socket.gethostbyname(socket.getfqdn(socket.gethostname()))
-        my_packet[IP].src = get_network_ip()
+        my_packet[IP].src = self.get_network_ip()
         my_packet[IP].dst = dst
         my_packet[IP].ttl = ttl
         my_packet[ICMP].type = 0x08
@@ -89,9 +88,9 @@ class icmp_trace_route(QMainWindow):
     def trace_route(self, dst):
         max_ttl = 64
         self.tb.clear()
-        if not legit_ip(dst):
+        if not self.legit_ip(dst):
             try:
-                dst = dns_resolve(dst)
+                dst = self.dns_resolve(dst)
             except socket.gaierror:
                 self.tb_print("The IP address or Domain is illegal")
                 return -1
@@ -104,7 +103,7 @@ class icmp_trace_route(QMainWindow):
             j = 0
             delay_time = []
             while j < 3:
-                p = pac_send(dst, ttl)
+                p = self.pac_send(dst, ttl)
                 if p[0] != -1:
                     ip = p[1]
                     delay_time.append(str(p[0]) + "ms")

@@ -28,7 +28,7 @@ def pac_send(dst, ttl):
     send_time = time.time()
     p = sr1(my_packet, timeout=2, verbose=False)
     ping_time = int((time.time() - send_time) * 1000)
-    p.show()
+    #p.show()
     if p:
         src_ip = p[IP].src
         return ping_time, src_ip
