@@ -1,11 +1,8 @@
-import time
 import ipdb
-from selenium import webdriver
 import IP2Location
-
-from PyQt5 import QtWidgets
+import ipdb
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QTextBrowser, QMainWindow
+from PyQt5.QtWidgets import QApplication, QLineEdit, QPushButton, QTextBrowser, QMainWindow
 from scapy.all import *
 from scapy.layers.inet import IP, ICMP
 
