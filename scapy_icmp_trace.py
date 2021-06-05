@@ -22,12 +22,13 @@ def pac_send(dst, ttl):
     my_packet[IP].src = get_network_ip()
     my_packet[IP].dst = dst
     my_packet[IP].ttl = ttl
+    my_packet[ICMP].type = 0x08
     my_packet[ICMP].id = 0x01
     my_packet[ICMP].seq = 0x02
     send_time = time.time()
     p = sr1(my_packet, timeout=2, verbose=False)
     ping_time = int((time.time() - send_time) * 1000)
-    # p.show()
+    p.show()
     if p:
         src_ip = p[IP].src
         return ping_time, src_ip
@@ -82,5 +83,6 @@ def legit_ip(ip):
 
 if __name__ == "__main__":
     # print(get_network_ip())
-     trace_route("1.1.1.1")
+     #trace_route("1.1.1.1")
+     pac_send("1.1.1.1",1)
 

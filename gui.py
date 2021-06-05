@@ -15,7 +15,7 @@ IP2LocObj = IP2Location.IP2Location()
 IP2LocObj.open("IP2LOCATION-LITE-DB9.BIN")
 
 
-class Example(QMainWindow):
+class icmp_trace_route(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -71,6 +71,7 @@ class Example(QMainWindow):
         my_packet[IP].src = get_network_ip()
         my_packet[IP].dst = dst
         my_packet[IP].ttl = ttl
+        my_packet[ICMP].type = 0x08
         my_packet[ICMP].id = 0x01
         my_packet[ICMP].seq = 0x02
         send_time = time.time()
@@ -215,5 +216,5 @@ map.addOverlay(polyline);          //增加折线
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = icmp_trace_route()
     sys.exit(app.exec_())
