@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: mpl-tools
+Version: 0.2
+Summary: Tools for working with matplotlib
+License: MIT
+Keywords: matplotlib,plotting
+Author: patricknraanes
+Author-email: patrick.n.raanes@gmail.com
+Requires-Python: >=3.6
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Dist: matplotlib (>=3.0)
+Description-Content-Type: text/markdown
+
+# mpl-tools
+
+[![Travis](https://travis-ci.org/patricknraanes/mpl-tools.svg?branch=master)](https://travis-ci.org/patricknraanes/mpl-tools)
+[![Coveralls](https://coveralls.io/repos/github/patricknraanes/mpl-tools/badge.svg?branch=master)](https://coveralls.io/github/patricknraanes/mpl-tools?branch=master)
+[![Hits.dwyl](http://hits.dwyl.com/patricknraanes/mpl-tools.svg)](http://hits.dwyl.com/patricknraanes/mpl-tools)
+[![PyPI](https://badge.fury.io/py/mpl-tools.svg)](https://badge.fury.io/py/mpl-tools)
+[![PyPI - Downloads](https://img.shields.io/pypi/dw/mpl-tools)](https://pypi.org/project/mpl-tools/0.1.5/)
+
+This package provides some tools to work with [Matplotlib](https://matplotlib.org/).
+
+- `freshfig`
+- `anchor_axes`, with auxiliaries:
+  - `align_ax_with`
+  - `set_ax_size`
+  - `get_legend_bbox`
+  - `xFontsize`
+- `add_log_toggler`
+  - `toggle_scale`
+
