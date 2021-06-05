@@ -1,4 +1,3 @@
-import ipdb
 import IP2Location
 import ipdb
 from PyQt5 import QtWidgets

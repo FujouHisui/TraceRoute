@@ -16,7 +16,7 @@ class flushfile(io.FileIO):
 sys.stdout = flushfile(sys.stdout)
 
 
-def main(dest_name):
+def udp_trace_route(dest_name):
     dest_addr = socket.gethostbyname(dest_name)
     port = 55285
     max_hops = 30
@@ -66,7 +66,3 @@ def main(dest_name):
         ttl += 1
         if curr_addr == dest_addr or ttl > max_hops:
             break
-
-
-if __name__ == "__main__":
-    main("baidu.com")
